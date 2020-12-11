@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
-    public void start(){
+    String generatedMaze = "";
+    public void start() {
         Scanner scanner = new Scanner(System.in);
-        String maze = "";
+        Maze maze = new Maze();
 
-            //boolean fromGenerate = false;
+        while (true) {
 
             System.out.println("=== Menu ===");
             System.out.println("1. Generate a new maze");
@@ -21,21 +22,24 @@ public class UserInterface {
 
             if (command == 1) {
                 maze = generateAMaze();
+                generatedMaze = maze.toString();
+                //maze.(true);
                 System.out.println(maze);
                 loadMazeMenu(maze);
 
             } else if (command == 2) {
-                loadMaze();
+                generatedMaze = loadMaze();
+                loadMazeMenu(maze);
+
             } else if (command == 0) {
                 return;
             } else {
                 System.out.println("Incorrect option. Please try again.");
             }
-
-
+        }
     }
 
-    public String generateAMaze(){
+    public Maze generateAMaze(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please, enter the size of a maze");
 //        String[] size = scanner.nextLine().split(" ");
@@ -44,41 +48,48 @@ public class UserInterface {
 
         int width = scanner.nextInt();
 
-        Maze maze = new Maze(width, width);
-        maze.generateMaze();
-        return maze.toString();
+        Maze maze = new Maze();
+        maze.generateMaze(width);
+        return maze;
 
     }
 
-    public void loadMazeMenu(String maze){
+    public void loadMazeMenu(Maze maze){
 
         Scanner scanner = new Scanner(System.in);
+
+        while (true) {
 
             System.out.println("=== Menu ===");
             System.out.println("1. Generate a new maze");
             System.out.println("2. Load a maze");
             System.out.println("3. Save the maze");
             System.out.println("4. Display the maze");
+            System.out.println("5. Find the escape");
             System.out.println("0. Exit");
 
             int loadOptions = scanner.nextInt();
-
             if (loadOptions == 1) {
-                generateAMaze();
+                maze = generateAMaze();
+                generatedMaze = maze.toString();
+                //maze.(true);
+                System.out.println(maze);
             } else if (loadOptions == 2) {
-                maze = loadMaze();
+                generatedMaze = loadMaze();
             } else if (loadOptions == 3) {
-                if (!maze.equals(" ")){
-                    saveMaze(maze);
-                }
+                saveMaze(generatedMaze);
             } else if (loadOptions == 4) {
-                displayMaze(maze);
+                displayMaze(generatedMaze);
+            } else if (loadOptions == 5) {
+                MazeSolver mazeSolver = new MazeSolver(maze);
+                mazeSolver.solve();
+                System.out.println(mazeSolver);
             } else if (loadOptions == 0) {
-                //break;
-                return;
-            }else{
+                break;
+            } else {
                 System.out.println("Incorrect option. Please try again.");
             }
+        }
 
     }
 

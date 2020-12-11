@@ -47,4 +47,6 @@ public class Cell {
     public String toString() {
         return this.wall;
     }
+
+
 }
